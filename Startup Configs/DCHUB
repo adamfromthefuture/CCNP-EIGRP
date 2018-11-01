@@ -1,0 +1,148 @@
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname DCHUB
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+ethernet lmi ce
+!
+!
+!
+no process cpu autoprofile hog
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+redundancy
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+crypto isakmp policy 5
+ authentication pre-share
+ group 2
+crypto isakmp key dmvpnkey address 0.0.0.0        
+crypto isakmp nat keepalive 20
+!
+!
+crypto ipsec transform-set dmvpnset esp-3des esp-sha-hmac 
+ mode tunnel
+!
+!
+crypto ipsec profile dmvpnprof
+ set transform-set dmvpnset 
+!
+!
+!
+!
+!
+!
+interface Tunnel0
+ no shutdown
+ no ip address
+!
+interface Tunnel1
+ no shutdown
+ description MULTI-POINT GRE TUNNEL for BRANCHES
+ bandwidth 1000
+ ip address 172.16.89.4 255.255.255.0
+ no ip redirects
+ ip mtu 1400
+ ip nhrp authentication dmvpn
+ ip nhrp map multicast dynamic
+ ip nhrp network-id 99
+ ip nhrp holdtime 300
+ delay 1000
+ tunnel source GigabitEthernet0/0
+ tunnel mode gre multipoint
+ tunnel key 100000
+ tunnel protection ipsec profile dmvpnprof
+!
+interface GigabitEthernet0/0
+ no shutdown
+ ip address 10.56.56.4 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+ no cdp enable
+!
+interface GigabitEthernet0/1
+ no shutdown
+ ip address 10.56.46.4 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+ no cdp enable
+!
+interface GigabitEthernet0/2
+ no shutdown
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+ no cdp enable
+!
+interface GigabitEthernet0/3
+ no shutdown
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+ no cdp enable
+!
+!
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+no scheduler allocate
+!
+end

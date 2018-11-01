@@ -1,0 +1,94 @@
+!
+! Last configuration change at 14:40:06 UTC Sun Oct 28 2018
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname DMZ
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+no process cpu extended history
+no process cpu autoprofile hog
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+no memory lite
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ no shutdown
+ media-type rj45
+ negotiation auto
+ no cdp enable
+!
+interface GigabitEthernet0/1
+ no shutdown
+ media-type rj45
+ negotiation auto
+ no cdp enable
+!
+interface GigabitEthernet0/2
+ no shutdown
+ media-type rj45
+ negotiation auto
+ no cdp enable
+!
+interface GigabitEthernet0/3
+ no shutdown
+ media-type rj45
+ negotiation auto
+ no cdp enable
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+line aux 0
+line vty 0 4
+ login
+!

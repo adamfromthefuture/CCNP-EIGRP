@@ -1,0 +1,97 @@
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname IGW-02
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+no process cpu extended history
+no process cpu autoprofile hog
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+no memory lite
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ no shutdown
+ no switchport
+ ip address 10.56.26.6 255.255.255.0
+ negotiation auto
+ no cdp enable
+!
+interface GigabitEthernet0/2
+ no shutdown
+ no switchport
+ ip address 10.56.46.6 255.255.255.0
+ negotiation auto
+ no cdp enable
+!
+interface GigabitEthernet0/1
+ no shutdown
+ no switchport
+ ip address 10.56.56.6 255.255.255.0
+ negotiation auto
+ no cdp enable
+!
+interface GigabitEthernet0/3
+ no shutdown
+ no switchport
+ ip address 192.168.67.6 255.255.255.0
+ negotiation auto
+ no cdp enable
+!
+!
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!

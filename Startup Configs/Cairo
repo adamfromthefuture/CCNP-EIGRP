@@ -1,0 +1,158 @@
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Cairo
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+ethernet lmi ce
+!
+!
+!
+no process cpu autoprofile hog
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+redundancy
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+crypto isakmp policy 5
+ authentication pre-share
+ group 2
+crypto isakmp key dmvpnkey address 0.0.0.0        
+!
+!
+crypto ipsec transform-set TSET esp-aes esp-md5-hmac 
+ mode tunnel
+crypto ipsec transform-set dmvpnset esp-3des esp-sha-hmac 
+ mode tunnel
+!
+!
+crypto ipsec profile dmvpnprof
+ set transform-set dmvpnset 
+!
+!
+!
+!
+!
+!
+interface Loopback9
+ no shutdown
+ ip address 9.9.9.9 255.255.255.0
+!
+interface Loopback99
+ no shutdown
+ ip address 99.99.99.99 255.255.255.0
+!
+interface Tunnel1
+ no shutdown
+ description HOST DYNAMIC TUNNEL
+ bandwidth 1000
+ ip address 172.16.89.9 255.255.255.0
+ no ip redirects
+ ip mtu 1400
+ ip nhrp authentication dmvpn
+ ip nhrp map 172.16.89.4 10.56.56.4
+ ip nhrp map multicast 10.56.56.4
+ ip nhrp network-id 99
+ ip nhrp holdtime 300
+ ip nhrp nhs 172.16.89.4
+ delay 1000
+ tunnel source GigabitEthernet0/0
+ tunnel mode gre multipoint
+ tunnel key 100000
+ tunnel protection ipsec profile dmvpnprof
+!
+interface GigabitEthernet0/0
+ no shutdown
+ ip address 192.168.79.9 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+ no cdp enable
+!
+interface GigabitEthernet0/1
+ no shutdown
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+ no cdp enable
+!
+interface GigabitEthernet0/2
+ no shutdown
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+ no cdp enable
+!
+interface GigabitEthernet0/3
+ no shutdown
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+ no cdp enable
+!
+!
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet0/0
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+no scheduler allocate
+!
+end
